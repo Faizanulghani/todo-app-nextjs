@@ -1,7 +1,6 @@
 const AddTodo = () => {
   return (
-    <div className="flex items-center justify-center gap-3 mt-6">
-      <div className="flex w-full max-w-xl bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
+      <div className="flex w-full  bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
         <input
           type="text"
           placeholder="Write your todo..."
@@ -11,7 +10,6 @@ const AddTodo = () => {
           Add Todo
         </button>
       </div>
-    </div>
   );
 };
 
