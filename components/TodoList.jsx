@@ -1,6 +1,26 @@
-const TodoList = async () => {
-  let res = await fetch("http://localhost:3000/api/todos");
-  const todos = await res.json();
+"use client";
+
+import { useEffect, useState } from "react";
+
+const TodoList = () => {
+  let [todos, setTodos] = useState([]);
+  const fetchTodo = async () => {
+    let res = await fetch("http://localhost:3000/api/todos");
+    const todos = await res.json();
+    setTodos(todos);
+  };
+
+  useEffect(() => {
+    fetchTodo();
+  }, []);
+
+  const todoCompleted = async (todo) => {
+    await fetch("http://localhost:3000/api/todos", {
+      method: "PATCH",
+      body: JSON.stringify({ id: todo._id, completed: !todo.completed }),
+    });
+    fetchTodo();
+  };
 
   return (
     <div className="bg-white w-full max-w-xl mx-auto p-6 rounded-2xl shadow-md border border-gray-100 mt-6">
@@ -20,7 +40,10 @@ const TodoList = async () => {
               {todo.title}
             </span>
             <div className="flex items-center gap-3">
-              <button className="text-green-500 hover:text-green-600 transition">
+              <button
+                onClick={() => todoCompleted(todo)}
+                className="text-green-500 hover:text-green-600 transition"
+              >
                 {todo.completed ? "❌" : "✔"}
               </button>
               <button className="text-blue-500 hover:text-blue-600 transition">

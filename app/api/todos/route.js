@@ -14,3 +14,10 @@ export async function POST(req) {
   const addTodo = await todo.create({ title: body.title });
   return NextResponse.json(addTodo);
 }
+
+export async function PATCH(req) {
+  await connectDb();
+  const { id, completed, title } = await req.json();
+  const updateTodo = await todo.findByIdAndUpdate(id, { completed });
+  return NextResponse.json(updateTodo);
+}
