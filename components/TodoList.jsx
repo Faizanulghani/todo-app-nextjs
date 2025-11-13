@@ -1,23 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
-const TodoList = () => {
-  let [todos, setTodos] = useState([]);
-  const fetchTodo = async () => {
-    let res = await fetch("http://localhost:3000/api/todos");
-    const todos = await res.json();
-    setTodos(todos);
-  };
-
-  useEffect(() => {
-    fetchTodo();
-  }, []);
-
+const TodoList = ({ fetchTodo, todos }) => {
   const todoCompleted = async (todo) => {
     await fetch("http://localhost:3000/api/todos", {
       method: "PATCH",
       body: JSON.stringify({ id: todo._id, completed: !todo.completed }),
+    });
+    fetchTodo();
+  };
+  const todoDelete = async (todo) => {
+    await fetch("http://localhost:3000/api/todos", {
+      method: "DELETE",
+      body: JSON.stringify({ id: todo._id }),
     });
     fetchTodo();
   };
@@ -49,7 +41,10 @@ const TodoList = () => {
               <button className="text-blue-500 hover:text-blue-600 transition">
                 ✏️
               </button>
-              <button className="text-red-500 hover:text-red-600 transition">
+              <button
+                onClick={() => todoDelete(todo)}
+                className="text-red-500 hover:text-red-600 transition"
+              >
                 🗑
               </button>
             </div>

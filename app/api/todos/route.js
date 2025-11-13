@@ -21,3 +21,9 @@ export async function PATCH(req) {
   const updateTodo = await todo.findByIdAndUpdate(id, { completed });
   return NextResponse.json(updateTodo);
 }
+
+export async function DELETE(req) {
+  await connectDb();
+  const { id } = await req.json();
+  await todo.findByIdAndDelete(id);
+}
