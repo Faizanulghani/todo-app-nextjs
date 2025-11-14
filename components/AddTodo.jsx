@@ -1,31 +1,32 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import TodoList from "./TodoList";
+import useTodos from "@/hooks/useTodos";
 
 const AddTodo = () => {
-  let [title, setTitle] = useState();
-  let [todos, setTodos] = useState([]);
-  const fetchTodo = async () => {
-    let res = await fetch("http://localhost:3000/api/todos");
-    const todos = await res.json();
-    setTodos(todos);
-  };
+  const {
+    todos,
+    addTodo,
+    updateTodo,
+    toggleComplete,
+    todoDelete,
+    fetchTodo,
+  } = useTodos();
 
-  useEffect(() => {
-    fetchTodo();
-  }, []);
-  const addTodo = async (e) => {
+  let [title, setTitle] = useState();
+
+  let handleAdd = (e) => {
     e.preventDefault();
-    await fetch("/api/todos", {
-      method: "POST",
-      body: JSON.stringify({ title }),
-    });
-    fetchTodo();
+    addTodo(title);
     setTitle("");
   };
+
   return (
     <>
-      <form className="flex w-full  bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200">
+      <form
+        onSubmit={handleAdd}
+        className="flex w-full  bg-white shadow-md rounded-2xl overflow-hidden border border-gray-200"
+      >
         <input
           type="text"
           name="title"
@@ -35,14 +36,20 @@ const AddTodo = () => {
           className="flex-1 p-4 outline-none text-gray-700 placeholder-gray-400 bg-transparent"
         />
         <button
-          onClick={addTodo}
           type="submit"
           className="bg-green-500 text-white px-6 font-semibold hover:bg-green-600 transition-all duration-200 cursor-pointer"
         >
           Add Todo
         </button>
       </form>
-      <TodoList fetchTodo={fetchTodo} todos={todos} />
+
+      <TodoList
+        fetchTodo={fetchTodo}
+        todos={todos}
+        toggleComplete={toggleComplete}
+        updateTodo={updateTodo}
+        deleteTodo={todoDelete}
+      />
     </>
   );
 };
