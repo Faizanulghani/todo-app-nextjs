@@ -40,22 +40,29 @@ const TodoList = ({ fetchTodo, todos }) => {
             className="flex items-center justify-between bg-gray-50 p-4 rounded-xl mb-3 hover:bg-gray-100 transition"
           >
             <span
-              className={`text-gray-700 ${
-                todo.completed ? "line-through" : ""
-              }`}
+              className={`text-gray-700`}
             >
               {editId === todo._id ? (
-                <>
+                <div className="flex items-center gap-2">
                   <input
-                    className="border p-2"
+                    className="border border-gray-300 p-2 rounded-lg w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
                     type="text"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    autoFocus
                   />
-                  <button onClick={() => todoTitle(todo)}>Save</button>
-                </>
+
+                  <button
+                    onClick={() => todoTitle(todo)}
+                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition shadow-sm"
+                  >
+                    Save
+                  </button>
+                </div>
               ) : (
-                todo.title
+                <span className={todo.completed ? "line-through" : ""}>
+                  {todo.title}
+                </span>
               )}
             </span>
             <div className="flex items-center gap-3">
