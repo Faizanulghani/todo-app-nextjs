@@ -1,4 +1,5 @@
 import { useState } from "react";
+import TodoEdit from "./TodoEdit";
 
 const TodoList = ({ fetchTodo, todos }) => {
   let [editId, setEditId] = useState(null);
@@ -9,15 +10,6 @@ const TodoList = ({ fetchTodo, todos }) => {
       method: "PATCH",
       body: JSON.stringify({ id: todo._id, completed: !todo.completed }),
     });
-    fetchTodo();
-  };
-
-  const todoTitle = async (todo) => {
-    await fetch("http://localhost:3000/api/todos", {
-      method: "PATCH",
-      body: JSON.stringify({ id: todo._id, title }),
-    });
-    setEditId(null);
     fetchTodo();
   };
 
@@ -41,22 +33,13 @@ const TodoList = ({ fetchTodo, todos }) => {
           >
             <span className={`text-gray-700`}>
               {editId === todo._id ? (
-                <div className="flex items-center gap-2">
-                  <input
-                    className="border border-gray-300 p-2 rounded-lg w-40 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-                    type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    autoFocus
-                  />
-
-                  <button
-                    onClick={() => todoTitle(todo)}
-                    className="bg-blue-500 text-white px-3 py-2 rounded-lg hover:bg-blue-600 transition shadow-sm"
-                  >
-                    Save
-                  </button>
-                </div>
+                <TodoEdit
+                  title={title}
+                  setTitle={setTitle}
+                  setEditId={setEditId}
+                  todo={todo}
+                  fetchTodo={fetchTodo}
+                />
               ) : (
                 <span className={todo.completed ? "line-through" : ""}>
                   {todo.title}
