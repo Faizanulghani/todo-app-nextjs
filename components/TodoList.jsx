@@ -1,24 +1,21 @@
 import { useState } from "react";
 import TodoEdit from "./TodoEdit";
 
-const TodoList = ({ fetchTodo, todos }) => {
+const TodoList = ({
+  todos,
+  toggleComplete,
+  updateTodo,
+  deleteTodo,
+}) => {
   let [editId, setEditId] = useState(null);
   let [title, setTitle] = useState("");
 
   const todoCompleted = async (todo) => {
-    await fetch("http://localhost:3000/api/todos", {
-      method: "PATCH",
-      body: JSON.stringify({ id: todo._id, completed: !todo.completed }),
-    });
-    fetchTodo();
+    toggleComplete(todo._id, todo.completed);
   };
 
   const todoDelete = async (todo) => {
-    await fetch("http://localhost:3000/api/todos", {
-      method: "DELETE",
-      body: JSON.stringify({ id: todo._id }),
-    });
-    fetchTodo();
+    deleteTodo(todo._id);
   };
 
   return (
@@ -38,7 +35,7 @@ const TodoList = ({ fetchTodo, todos }) => {
                   setTitle={setTitle}
                   setEditId={setEditId}
                   todo={todo}
-                  fetchTodo={fetchTodo}
+                  updateTodo={updateTodo}
                 />
               ) : (
                 <span className={todo.completed ? "line-through" : ""}>

@@ -1,13 +1,9 @@
 import React from "react";
 
-const TodoEdit = ({ setTitle, title, setEditId, todo, fetchTodo }) => {
+const TodoEdit = ({ setTitle, title, todo, updateTodo, setEditId }) => {
   const todoTitle = async (todo) => {
-    await fetch("http://localhost:3000/api/todos", {
-      method: "PATCH",
-      body: JSON.stringify({ id: todo._id, title }),
-    });
+    updateTodo(todo._id, title);
     setEditId(null);
-    fetchTodo();
   };
   return (
     <div className="flex items-center gap-2">
