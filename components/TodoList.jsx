@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 const TodoList = ({ fetchTodo, todos }) => {
+  let [editId, setEditId] = useState(null);
+  let [title, setTitle] = useState("");
+
   const todoCompleted = async (todo) => {
     await fetch("http://localhost:3000/api/todos", {
       method: "PATCH",
@@ -6,6 +11,16 @@ const TodoList = ({ fetchTodo, todos }) => {
     });
     fetchTodo();
   };
+
+  const todoTitle = async (todo) => {
+    await fetch("http://localhost:3000/api/todos", {
+      method: "PATCH",
+      body: JSON.stringify({ id: todo._id, title }),
+    });
+    setEditId(null);
+    fetchTodo();
+  };
+
   const todoDelete = async (todo) => {
     await fetch("http://localhost:3000/api/todos", {
       method: "DELETE",
@@ -29,7 +44,19 @@ const TodoList = ({ fetchTodo, todos }) => {
                 todo.completed ? "line-through" : ""
               }`}
             >
-              {todo.title}
+              {editId === todo._id ? (
+                <>
+                  <input
+                    className="border p-2"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <button onClick={() => todoTitle(todo)}>Save</button>
+                </>
+              ) : (
+                todo.title
+              )}
             </span>
             <div className="flex items-center gap-3">
               <button
@@ -38,7 +65,13 @@ const TodoList = ({ fetchTodo, todos }) => {
               >
                 {todo.completed ? "❌" : "✔"}
               </button>
-              <button className="text-blue-500 hover:text-blue-600 transition">
+              <button
+                onClick={() => {
+                  setEditId(todo._id);
+                  setTitle(todo.title);
+                }}
+                className="text-blue-500 hover:text-blue-600 transition"
+              >
                 ✏️
               </button>
               <button
