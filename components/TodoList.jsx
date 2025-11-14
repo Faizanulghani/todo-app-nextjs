@@ -39,9 +39,7 @@ const TodoList = ({ fetchTodo, todos }) => {
             key={todo._id}
             className="flex items-center justify-between bg-gray-50 p-4 rounded-xl mb-3 hover:bg-gray-100 transition"
           >
-            <span
-              className={`text-gray-700`}
-            >
+            <span className={`text-gray-700`}>
               {editId === todo._id ? (
                 <div className="flex items-center gap-2">
                   <input
